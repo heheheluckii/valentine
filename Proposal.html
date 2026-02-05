@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Romantic Proposal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+<style>
+.final-screen {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.2);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.final-img {
+    max-width: 90%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    margin-bottom: 30px;
+}
+
+.final-text {
+    background: rgba(255,255,255,0.85);
+    padding: 20px 30px;
+    border-radius: 20px;
+    font-size: 1.8em;
+    text-align: center;
+    color: #d63384;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Dancing Script', cursive;
+    background-image: url('hearts-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
+    color: #d63384;
+    overflow: hidden;
+}
+
+/* Falling hearts */
+.falling-hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.heart {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #ff9ebc;
+    transform: rotate(45deg);
+    opacity: 0.6;
+    animation: fall ease-in infinite;
+}
+
+.heart::before,
+.heart::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #ff9ebc;
+    border-radius: 50%;
+}
+
+.heart::before { top: -7px; left: 0; }
+.heart::after { left: -7px; top: 0; }
+
+@keyframes fall {
+    from { transform: translateY(-10vh) rotate(45deg); opacity: 0; }
+    to { transform: translateY(110vh) rotate(45deg); opacity: 0; }
+}
+
+/* Proposal card */
+.container {
+    max-width: 600px;
+    margin: 100px auto;
+    background: rgba(255,255,255,0.93);
+    border-radius: 25px;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+h1 { font-size: 2.6em; }
+p { font-size: 1.3em; }
+.question { font-size: 1.6em; margin: 20px 0; color: #ff69b4; }
+.buttons { display: flex; justify-content: center; gap: 20px; position: relative; }
+button { padding: 15px 30px; font-size: 1.2em; border-radius: 50px; border: none; cursor: pointer; }
+#yes { background: linear-gradient(45deg, #ff69b4, #ffb6c1); color: white; }
+#no { background: #ffe4ec; color: #d63384; position: relative; }
+.message { margin-top: 25px; font-size: 1.3em; display: none; color: #ff69b4; }
+
+/* Final bouquet screen (hidden by default) */
+.final-screen {
+    display: none; /* hidden initially */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+}
+
+.final-text {
+    background: rgba(255,255,255,0.85);
+    padding: 40px;
+    border-radius: 30px;
+    font-size: 2em;
+    text-align: center;
+    color: #d63384;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+
+<body>
+
+<div class="falling-hearts">
+<script>
+for (let i = 0; i < 40; i++) {
+    document.write(`
+        <div class="heart" style="
+            left:${Math.random()*100}%;
+            animation-duration:${8+Math.random()*6}s;
+            animation-delay:${Math.random()*10}s;
+            transform: scale(${0.3+Math.random()*0.7});
+        "></div>
+    `);
+}
+</script>
+</div>
+
+<!-- Proposal Card -->
+<div class="container" id="proposal">
+    <h1>💕 My Pretty Boii 💕</h1>
+    <p>You make my world softer, brighter, and warmer every single day 💗</p>
+    <div class="question">Will you be my Valentine? 💕</div>
+    <div class="buttons">
+        <button id="yes">Yes 💖</button>
+        <button id="no">No 😢</button>
+    </div>
+    <div class="message" id="msg"></div>
+</div>
+
+<!-- Final Bouquet Screen -->
+<div class="final-screen" id="final">
+    <img src="bouquet.png" alt="Bouquet" class="final-img">
+    <div class="final-text">
+        i know uu are mine , i will never let you go anywhere myy honey bunny 😚 
+         ab tujhe mujhse koi nahi bacha skta ..tu to gaya laale 
+          ..roj khoon ke aansu rulaungi...hehehehehe
+    </div>
+</div>
+
+
+<script>
+const yes = document.getElementById('yes');
+const no = document.getElementById('no');
+const msg = document.getElementById('msg');
+const proposal = document.getElementById('proposal');
+const final = document.getElementById('final');
+
+let noTries = 0;
+
+function moveNo() {
+    no.style.position = 'absolute';
+    no.style.left = Math.random() * 70 + '%';
+    no.style.top = Math.random() * 40 + 'px';
+}
+
+// Make NO button move when hovered
+no.addEventListener('mouseover', () => {
+    if (noTries < 4) moveNo();
+});
+
+// Clicking NO logic
+no.addEventListener('click', () => {
+    noTries++;
+    if (noTries < 4) {
+        moveNo();
+        msg.style.display = 'block';
+        msg.innerText = "Hehe nope 😘 try again my pretty boii 💕";
+    } else {
+        showBouquet();
+    }
+});
+
+// Clicking YES logic
+yes.addEventListener('click', showBouquet);
+
+// Show bouquet screen
+function showBouquet() {
+    proposal.style.display = 'none';
+    final.style.display = 'flex';
+}
+</script>
+
+</body>
+</html>
